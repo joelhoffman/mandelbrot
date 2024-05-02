@@ -59,7 +59,7 @@ impl MandelbrotFrame {
         return iteration;
     }
 
-    pub fn compute(&mut self) -> () {
+    pub fn compute(&mut self) {
         for x in 0..self.width() {
             let sx = self.interpolated_x(x);
             for y in 0..self.height() {
