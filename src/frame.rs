@@ -36,9 +36,9 @@ impl MandelbrotFrame {
         MandelbrotFrame {
             results: Array2D::filled_with(0, y, x),
             xmin: -2.2, 
-            xmax:0.6,
+            xmax: 0.6,
             ymin:-1.5,
-            ymax:1.2,
+            ymax:1.5,
             iter_max: 1000            
         }
     }
