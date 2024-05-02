@@ -10,18 +10,18 @@ pub struct MandelbrotFrame {
 
 impl MandelbrotFrame {
     pub fn interpolated_x(&self, px: usize) -> f32 {
-        self.xmin + (px as f32) * self.xrange()/(self.width() as f32)
+        self.xmin + (px as f32) * self.xrange() / (self.width() as f32)
     }
 
     pub fn xrange(&self) -> f32 {
-        self.xmax-self.xmin
+        self.xmax - self.xmin
     }
     pub fn interpolated_y(&self, py: usize) -> f32 {
-        self.ymin + (py as f32) * self.yrange()/(self.height() as f32)
+        self.ymin + (py as f32) * self.yrange() / (self.height() as f32)
     }
 
     pub fn yrange(&self) -> f32 {
-        self.ymax-self.ymin
+        self.ymax - self.ymin
     }
 
     pub fn width(&self) -> usize {
@@ -35,11 +35,11 @@ impl MandelbrotFrame {
     pub fn new(x: usize, y: usize) -> MandelbrotFrame {
         MandelbrotFrame {
             results: Array2D::filled_with(0, y, x),
-            xmin: -2.2, 
+            xmin: -2.2,
             xmax: 0.6,
-            ymin:-1.5,
-            ymax:1.5,
-            iter_max: 1000            
+            ymin: -1.5,
+            ymax: 1.5,
+            iter_max: 1000,
         }
     }
 
@@ -47,9 +47,9 @@ impl MandelbrotFrame {
         let mut x = 0.0;
         let mut y = 0.0;
         let mut iteration: u32 = 0;
-        while x*x + y*y <= 4.0 && iteration < self.iter_max {
-            let xtemp = x*x - y*y + r;
-            y = 2.0*x*y + i;
+        while x * x + y * y <= 4.0 && iteration < self.iter_max {
+            let xtemp = x * x - y * y + r;
+            y = 2.0 * x * y + i;
             x = xtemp;
             iteration = iteration + 1
         }
@@ -61,9 +61,8 @@ impl MandelbrotFrame {
             let sx = self.interpolated_x(x);
             for y in 0..self.height() {
                 let sy = self.interpolated_y(y);
-                self.results.set(y, x, self.iterations(sx,sy)).unwrap();
+                self.results.set(y, x, self.iterations(sx, sy)).unwrap();
             }
         }
     }
-
 }

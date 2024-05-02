@@ -5,6 +5,6 @@ pub mod frame;
 pub mod text_renderer;
 
 fn main() {
-    let frame = MandelbrotFrame::new(140,80);
+    let frame = MandelbrotFrame::new(140, 80);
     TextRenderer::new(frame).render();
 }
