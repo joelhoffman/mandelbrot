@@ -9,7 +9,7 @@ pub struct TextRenderer<'a> {
 impl TextRenderer<'static> {
     pub fn new(frame: MandelbrotFrame) -> TextRenderer<'static> {
         TextRenderer {
-            frame: frame,
+            frame,
             mapping: range_map! {
                 0..1 => "#",
                 1..2 => "~",
