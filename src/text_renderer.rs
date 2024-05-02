@@ -1,15 +1,31 @@
 use crate::frame::MandelbrotFrame;
 use rangemap::{range_map, RangeMap};
+use crate::renderer::Renderer;
 
 pub struct TextRenderer<'a> {
-    frame: MandelbrotFrame,
     mapping: RangeMap<u32, &'a str>,
 }
 
+impl Renderer for TextRenderer {
+    fn dimensions() -> (i32, i32) {
+        (120,60)
+    }
+
+    fn render(&mut self, mut frame: MandelbrotFrame) -> () {
+        frame.compute();
+        for row in frame.results.as_rows() {
+            println!(
+                "{}",
+                row.iter()
+                    .map(|f| self.mapping.get(f).unwrap().to_string())
+                    .collect::<String>()
+            )
+        }
+    }
+}
 impl TextRenderer<'static> {
-    pub fn new(frame: MandelbrotFrame) -> TextRenderer<'static> {
+    pub fn new() -> TextRenderer<'static> {
         TextRenderer {
-            frame,
             mapping: range_map! {
                 0..1 => "#",
                 1..2 => "~",
@@ -25,17 +41,6 @@ impl TextRenderer<'static> {
                 70..1001 => " ",
                 //✪✫✬✭✻⊗∼
             },
-        }
-    }
-    pub fn render(&mut self) -> () {
-        self.frame.compute();
-        for row in self.frame.results.as_rows() {
-            println!(
-                "{}",
-                row.iter()
-                    .map(|f| self.mapping.get(f).unwrap().to_string())
-                    .collect::<String>()
-            )
         }
     }
 }
