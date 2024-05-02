@@ -7,4 +7,6 @@ edition = "2021"
 
 [dependencies]
 array2d = "0.3.2"
+num = "0.4.2"
+num-complex = "0.4.5"
 rangemap = "1.5.1"

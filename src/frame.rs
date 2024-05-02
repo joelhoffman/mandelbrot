@@ -1,4 +1,6 @@
 use array2d::Array2D;
+use num_complex::Complex32;
+
 pub struct MandelbrotFrame {
     pub xmin: f32,
     pub xmax: f32,
@@ -20,6 +22,10 @@ impl MandelbrotFrame {
         self.ymin + (py as f32) * self.yrange() / (self.height() as f32)
     }
 
+    pub fn interpolated(&self, px: usize, py: usize) -> Complex32 {
+        Complex32::new(self.interpolated_x(px), self.interpolated_y(py))
+    }
+ 
     pub fn yrange(&self) -> f32 {
         self.ymax - self.ymin
     }
@@ -43,14 +49,11 @@ impl MandelbrotFrame {
         }
     }
 
-    pub fn iterations(&self, r: f32, i: f32) -> u32 {
-        let mut x = 0.0;
-        let mut y = 0.0;
+    pub fn iterations(&self, zp: Complex32) -> u32 {
+        let mut z = zp;
         let mut iteration: u32 = 0;
-        while x * x + y * y <= 4.0 && iteration < self.iter_max {
-            let xtemp = x * x - y * y + r;
-            y = 2.0 * x * y + i;
-            x = xtemp;
+        while z.norm() <= 4.0 && iteration < self.iter_max {
+            z = z * z + zp;
             iteration = iteration + 1
         }
         return iteration;
@@ -61,7 +64,8 @@ impl MandelbrotFrame {
             let sx = self.interpolated_x(x);
             for y in 0..self.height() {
                 let sy = self.interpolated_y(y);
-                self.results.set(y, x, self.iterations(sx, sy)).unwrap();
+                let z = Complex32::new(sx,sy);
+                self.results.set(y, x, self.iterations(z)).unwrap();
             }
         }
     }
