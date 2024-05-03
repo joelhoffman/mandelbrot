@@ -1,7 +1,7 @@
-use array2d::Array2D;
 use crate::frame::MandelbrotFrame;
-use rangemap::{range_map, RangeMap};
 use crate::renderer::Renderer;
+use array2d::Array2D;
+use rangemap::{range_map, RangeMap};
 
 pub struct TextRenderer<'a> {
     mapping: RangeMap<u32, &'a str>,
@@ -9,7 +9,7 @@ pub struct TextRenderer<'a> {
 
 impl Renderer for TextRenderer<'static> {
     fn dimensions(&self) -> (usize, usize) {
-        (120,60)
+        (120, 60)
     }
 
     fn render(&mut self, mut frame: MandelbrotFrame) -> () {

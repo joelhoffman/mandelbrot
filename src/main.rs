@@ -9,9 +9,9 @@ use crate::renderer::Renderer;
 use crate::text_renderer::TextRenderer;
 
 pub mod frame;
+mod png_renderer;
 pub mod renderer;
 pub mod text_renderer;
-mod png_renderer;
 
 fn main() {
     let arguments = arguments::parse(env::args()).unwrap();
@@ -24,8 +24,7 @@ fn main() {
 }
 
 fn initialize(arguments: Arguments) -> Box<dyn Renderer> {
-    let str = arguments.get::<String>("r")
-        .unwrap_or("text".to_string());
+    let str = arguments.get::<String>("r").unwrap_or("text".to_string());
     let x = str.as_str();
     if x == "text" {
         return Box::new(TextRenderer::new());
