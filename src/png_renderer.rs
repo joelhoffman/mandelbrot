@@ -1,6 +1,6 @@
 use colorgrad;
 use image;
-use image::{ImageBuffer, Pixel, Rgb};
+use image::{ImageBuffer, Rgb};
 
 use crate::frame::MandelbrotFrame;
 use crate::renderer::Renderer;
@@ -26,8 +26,8 @@ impl Renderer for PngRenderer {
 
         let iter_max = frame.iter_max;
         let pixel_fn = |x: usize, y: usize, iter: u32| {
-            let color = if iter as u32 >= iter_max {
-                image::Rgb([0u8, 0u8, 0u8])
+            let color = if iter >= iter_max {
+                Rgb([0u8, 0u8, 0u8])
             } else {
                 let x1: &[u8; 4] = &vec[iter as usize].to_rgba8();
                 Rgb([x1[0], x1[1], x1[2]])

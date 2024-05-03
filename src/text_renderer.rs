@@ -14,7 +14,7 @@ impl Renderer for TextRenderer<'static> {
 
     fn render(&mut self, mut frame: MandelbrotFrame) -> () {
         let mut results = Array2D::filled_with(0, frame.height, frame.width);
-        let x1 = |x, y, i| (results).set(y, x, i);
+        let x1 = |x, y, i| results.set(y, x, i);
         frame.compute(x1).unwrap();
         for row in results.as_rows() {
             println!(
