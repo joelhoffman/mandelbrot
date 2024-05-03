@@ -8,6 +8,8 @@ edition = "2021"
 [dependencies]
 arguments = "0.7.2"
 array2d = "0.3.2"
+colorgrad = "0.6.2"
+image = "0.25.1"
 num = "0.4.2"
 num-complex = "0.4.5"
 png = "0.17.13"

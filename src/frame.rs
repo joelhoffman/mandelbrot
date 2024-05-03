@@ -1,4 +1,3 @@
-use array2d::Array2D;
 use num_complex::Complex32;
 
 pub struct MandelbrotFrame {
@@ -7,19 +6,20 @@ pub struct MandelbrotFrame {
     pub ymin: f32,
     pub ymax: f32,
     pub iter_max: u32,
-    pub results: Array2D<u32>,
+    pub width: usize,
+    pub height: usize
 }
 
 impl MandelbrotFrame {
     pub fn interpolated_x(&self, px: usize) -> f32 {
-        self.xmin + (px as f32) * self.xrange() / (self.width() as f32)
+        self.xmin + (px as f32) * self.xrange() / (self.width as f32)
     }
 
     pub fn xrange(&self) -> f32 {
         self.xmax - self.xmin
     }
     pub fn interpolated_y(&self, py: usize) -> f32 {
-        self.ymin + (py as f32) * self.yrange() / (self.height() as f32)
+        self.ymin + (py as f32) * self.yrange() / (self.height as f32)
     }
 
     pub fn interpolated(&self, px: usize, py: usize) -> Complex32 {
@@ -30,22 +30,15 @@ impl MandelbrotFrame {
         self.ymax - self.ymin
     }
 
-    pub fn width(&self) -> usize {
-        self.results.num_columns()
-    }
-
-    pub fn height(&self) -> usize {
-        self.results.num_rows()
-    }
-
     pub fn new(x: usize, y: usize) -> MandelbrotFrame {
         MandelbrotFrame {
-            results: Array2D::filled_with(0, y, x),
+            width: x,
+            height: y,
             xmin: -2.2,
             xmax: 0.6,
             ymin: -1.5,
             ymax: 1.5,
-            iter_max: 1000,
+            iter_max: 200,
         }
     }
 
@@ -59,14 +52,15 @@ impl MandelbrotFrame {
         return iteration;
     }
 
-    pub fn compute(&mut self) {
-        for x in 0..self.width() {
+    pub fn compute<E>(&mut self, mut f: impl FnMut(usize,usize,u32) -> Result<(), E>) -> Result<(), E> {
+        for x in 0..self.width {
             let sx = self.interpolated_x(x);
-            for y in 0..self.height() {
+            for y in 0..self.height {
                 let sy = self.interpolated_y(y);
                 let z = Complex32::new(sx,sy);
-                self.results.set(y, x, self.iterations(z)).unwrap();
+                f(x,y,self.iterations(z))?;
             }
         }
+        Ok(())
     }
 }

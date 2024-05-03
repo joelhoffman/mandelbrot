@@ -1,14 +1,17 @@
+use std::env;
+
+use arguments;
+use arguments::Arguments;
+
 use crate::frame::MandelbrotFrame;
+use crate::png_renderer::PngRenderer;
 use crate::renderer::Renderer;
 use crate::text_renderer::TextRenderer;
 
 pub mod frame;
 pub mod renderer;
 pub mod text_renderer;
-
-use std::env;
-use arguments;
-use arguments::Arguments;
+mod png_renderer;
 
 fn main() {
     let arguments = arguments::parse(env::args()).unwrap();
@@ -20,10 +23,16 @@ fn main() {
     renderer.render(frame);
 }
 
-fn initialize(arguments: Arguments) -> &'static dyn Renderer {
-    match arguments.get::<&str>("r")? {
-        "text" => &TextRenderer::new(),
-        // "png" => &PngRenderer::new(),
-        _ => panic!("unknown renderer")
+fn initialize(arguments: Arguments) -> Box<dyn Renderer> {
+    let str = arguments.get::<String>("r")
+        .unwrap_or("text".to_string());
+    let x = str.as_str();
+    if x == "text" {
+        return Box::new(TextRenderer::new());
     }
+    if x == "png" {
+        return Box::new(PngRenderer::new());
+    }
+
+    panic!("unknown renderer")
 }
