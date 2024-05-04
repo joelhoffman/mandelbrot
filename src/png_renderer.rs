@@ -18,7 +18,7 @@ impl Renderer for PngRenderer {
 
     fn render(&mut self) {
         let (w, h) = (3000, 3000);
-        let mut frame = MandelbrotFrame::new(w, h);
+        let frame = MandelbrotFrame::new(w, h);
 
         let mut imgbuf: ImageBuffer<Rgb<u8>, Vec<_>> =
             ImageBuffer::new(frame.width, frame.height);
