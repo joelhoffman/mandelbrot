@@ -8,13 +8,12 @@ pub struct TextRenderer<'a> {
 }
 
 impl Renderer for TextRenderer<'static> {
-    fn dimensions(&self) -> (usize, usize) {
-        (120, 60)
-    }
+    fn render(&mut self) -> () {
+        let (w, h) = (120, 60);
+        let mut frame = MandelbrotFrame::new(w, h);
 
-    fn render(&mut self, mut frame: MandelbrotFrame) -> () {
-        let mut results = Array2D::filled_with(0, frame.height, frame.width);
-        let x1 = |x, y, i| results.set(y, x, i);
+        let mut results = Array2D::filled_with(0, frame.height as usize, frame.width as usize);
+        let x1 = |x: u32, y: u32, i| results.set(y as usize, x as usize, i);
         frame.compute(x1).unwrap();
         for row in results.as_rows() {
             println!(

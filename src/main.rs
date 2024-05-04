@@ -3,7 +3,7 @@ use std::env;
 use arguments;
 use arguments::Arguments;
 
-use crate::frame::MandelbrotFrame;
+use crate::fltk_renderer::FltkRenderer;
 use crate::png_renderer::PngRenderer;
 use crate::renderer::Renderer;
 use crate::text_renderer::TextRenderer;
@@ -12,15 +12,14 @@ pub mod frame;
 mod png_renderer;
 pub mod renderer;
 pub mod text_renderer;
+mod fltk_renderer;
 
 fn main() {
     let arguments = arguments::parse(env::args()).unwrap();
 
     let mut renderer = initialize(arguments);
 
-    let (x, y) = renderer.dimensions();
-    let frame = MandelbrotFrame::new(x, y);
-    renderer.render(frame);
+    renderer.render();
 }
 
 fn initialize(arguments: Arguments) -> Box<dyn Renderer> {
@@ -31,6 +30,9 @@ fn initialize(arguments: Arguments) -> Box<dyn Renderer> {
     }
     if x == "png" {
         return Box::new(PngRenderer::new());
+    }
+    if x == "gui" {
+        return Box::new(FltkRenderer::new());
     }
 
     panic!("unknown renderer")

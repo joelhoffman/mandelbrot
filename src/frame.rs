@@ -6,23 +6,23 @@ pub struct MandelbrotFrame {
     pub ymin: f32,
     pub ymax: f32,
     pub iter_max: u32,
-    pub width: usize,
-    pub height: usize,
+    pub width: u32,
+    pub height: u32,
 }
 
 impl MandelbrotFrame {
-    pub fn interpolated_x(&self, px: usize) -> f32 {
+    pub fn interpolated_x(&self, px: u32) -> f32 {
         self.xmin + (px as f32) * self.xrange() / (self.width as f32)
     }
 
     pub fn xrange(&self) -> f32 {
         self.xmax - self.xmin
     }
-    pub fn interpolated_y(&self, py: usize) -> f32 {
+    pub fn interpolated_y(&self, py: u32) -> f32 {
         self.ymin + (py as f32) * self.yrange() / (self.height as f32)
     }
 
-    pub fn interpolated(&self, px: usize, py: usize) -> Complex32 {
+    pub fn interpolated(&self, px: u32, py: u32) -> Complex32 {
         Complex32::new(self.interpolated_x(px), self.interpolated_y(py))
     }
 
@@ -30,7 +30,7 @@ impl MandelbrotFrame {
         self.ymax - self.ymin
     }
 
-    pub fn new(x: usize, y: usize) -> MandelbrotFrame {
+    pub fn new(x: u32, y: u32) -> MandelbrotFrame {
         MandelbrotFrame {
             width: x,
             height: y,
@@ -54,7 +54,7 @@ impl MandelbrotFrame {
 
     pub fn compute<E>(
         &mut self,
-        mut f: impl FnMut(usize, usize, u32) -> Result<(), E>,
+        mut f: impl FnMut(u32, u32, u32) -> Result<(), E>,
     ) -> Result<(), E> {
         for x in 0..self.width {
             let sx = self.interpolated_x(x);
