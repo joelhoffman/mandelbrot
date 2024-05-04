@@ -87,18 +87,6 @@ impl Canvas {
                         f.redraw();
                         true
                     }
-                    // Event::Drag => {
-                    //     ImageSurface::push_current(&surf);
-                    //     set_draw_color(Color::Red);
-                    //     set_line_style(LineStyle::Solid, 3);
-                    //     let coords = app::event_coords();
-                    //     draw_line(x, y, coords.0, coords.1);
-                    //     x = coords.0;
-                    //     y = coords.1;
-                    //     ImageSurface::pop_current();
-                    //     f.redraw();
-                    //     true
-                    // }
                     _ => false,
                 }
             }
