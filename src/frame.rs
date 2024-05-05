@@ -46,14 +46,10 @@ impl MandelbrotFrame {
         let mut zx = sx;
         let mut zy = sy;
         let mut iteration: u32 = 0;
-        let mut zxx = zx*zx;
-        let mut zyy = zy*zy;
-        while zxx+zyy <= 4.0 && iteration < self.iter_max {
+        while zx*zx+zy*zy <= 4.0 && iteration < self.iter_max {
             let temp_x = zx;
-            zx = zxx-zyy+sx;
+            zx = zx*zx-zy*zy+sx;
             zy = 2.0*temp_x*zy+sy;
-            zxx = zx*zx;
-            zyy = zy*zy;
 
             iteration = iteration + 1
         }
