@@ -1,4 +1,4 @@
-use num_complex::Complex64;
+use stopwatch::Stopwatch;
 
 pub struct MandelbrotFrame {
     pub xmin: f64,
@@ -22,8 +22,8 @@ impl MandelbrotFrame {
         self.ymin + (py as f64) * self.yrange() / (self.height as f64)
     }
 
-    pub fn interpolated(&self, px: u32, py: u32) -> Complex64 {
-        Complex64::new(self.interpolated_x(px), self.interpolated_y(py))
+    pub fn interpolated(&self, px: u32, py: u32) -> (f64,f64) {
+        (self.interpolated_x(px), self.interpolated_y(py))
     }
 
     pub fn yrange(&self) -> f64 {
@@ -38,15 +38,23 @@ impl MandelbrotFrame {
             xmax: 0.6,
             ymin: -1.5,
             ymax: 1.5,
-            iter_max: 500,
+            iter_max: 1000,
         }
     }
 
-    pub fn iterations(&self, zp: Complex64) -> u32 {
-        let mut z = zp;
+    pub fn iterations(&self, sx: f64, sy: f64) -> u32 {
+        let mut zx = sx;
+        let mut zy = sy;
         let mut iteration: u32 = 0;
-        while z.norm() <= 4.0 && iteration < self.iter_max {
-            z = z * z + zp;
+        let mut zxx = zx*zx;
+        let mut zyy = zy*zy;
+        while zxx+zyy <= 4.0 && iteration < self.iter_max {
+            let temp_x = zx;
+            zx = zxx-zyy+sx;
+            zy = 2.0*temp_x*zy+sy;
+            zxx = zx*zx;
+            zyy = zy*zy;
+
             iteration = iteration + 1
         }
         return iteration;
@@ -56,14 +64,20 @@ impl MandelbrotFrame {
         &self,
         mut f: impl FnMut(u32, u32, u32) -> Result<(), E>,
     ) -> Result<(), E> {
+        let sw = Stopwatch::start_new();
+        let mut f_sw = Stopwatch::new();
         for x in 0..self.width {
             let sx = self.interpolated_x(x);
             for y in 0..self.height {
                 let sy = self.interpolated_y(y);
-                let z = Complex64::new(sx, sy);
-                f(x, y, self.iterations(z))?;
+                // let z = Complex64::new(sx, sy);
+                let iter = self.iterations(sx,sy);
+                f_sw.start();
+                f(x, y, iter)?;
+                f_sw.stop();
             }
         }
+        println!("Compute took {:.6}s of which {:.6}s is in the closure", sw.elapsed().as_secs_f32(), f_sw.elapsed().as_secs_f32());
         Ok(())
     }
 }
