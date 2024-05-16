@@ -1,5 +1,3 @@
-use stopwatch::Stopwatch;
-
 pub struct MandelbrotFrame {
     pub xmin: f64,
     pub xmax: f64,
@@ -60,20 +58,15 @@ impl MandelbrotFrame {
         &self,
         mut f: impl FnMut(u32, u32, u32) -> Result<(), E>,
     ) -> Result<(), E> {
-        let sw = Stopwatch::start_new();
-        let mut f_sw = Stopwatch::new();
         for x in 0..self.width {
             let sx = self.interpolated_x(x);
             for y in 0..self.height {
                 let sy = self.interpolated_y(y);
                 // let z = Complex64::new(sx, sy);
                 let iter = self.iterations(sx,sy);
-                f_sw.start();
                 f(x, y, iter)?;
-                f_sw.stop();
             }
         }
-        println!("Compute took {:.6}s of which {:.6}s is in the closure", sw.elapsed().as_secs_f32(), f_sw.elapsed().as_secs_f32());
         Ok(())
     }
 }
