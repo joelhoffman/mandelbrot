@@ -7,7 +7,7 @@ pub struct TextRenderer<'a> {
     mapping: RangeMap<u32, &'a str>,
 }
 
-impl Renderer for TextRenderer<'static> {
+impl Renderer for TextRenderer<'_> {
     fn render(&mut self) -> () {
         let (w, h) = (120, 60);
         let frame = MandelbrotFrame::new(w, h);
@@ -25,8 +25,8 @@ impl Renderer for TextRenderer<'static> {
         }
     }
 }
-impl TextRenderer<'static> {
-    pub fn new() -> TextRenderer<'static> {
+impl TextRenderer<'_>{
+    pub fn new() -> TextRenderer<'static>{
         TextRenderer {
             mapping: range_map! {
                 0..1 => "#",

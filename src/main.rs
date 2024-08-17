@@ -25,15 +25,11 @@ fn main() {
 fn initialize(arguments: Arguments) -> Box<dyn Renderer> {
     let str = arguments.get::<String>("r").unwrap_or("text".to_string());
     let x = str.as_str();
-    if x == "text" {
-        return Box::new(TextRenderer::new());
-    }
-    if x == "png" {
-        return Box::new(PngRenderer::new());
-    }
-    if x == "gui" {
-        return Box::new(FltkRenderer::new());
-    }
 
-    panic!("unknown renderer")
+    match x {
+        "text" => Box::new(TextRenderer::new()),
+        "png" => Box::new(PngRenderer::new()),
+        "gui" => Box::new(FltkRenderer::new()),
+        _ => panic!("unknown renderer")
+    }
 }
